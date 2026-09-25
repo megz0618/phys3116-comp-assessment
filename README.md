@@ -1,2 +1,3 @@
 # phys3116-comp-assessment
-PHYS 3116: Computational Assessment
+PHYS3116: Computational Assessment
+Meghana Kuchi z5478377
