@@ -17,4 +17,15 @@ with open('data/HarrisPartIII.csv', 'r') as harrisP3_file: # 'r' for read-only i
 harrisP3_file.close() # Closes file after use
 
 # Imported and printed Krause21.csv file to check proper read
+with open('data/Krause21.csv', 'r') as krause21_file: # 'r' for read-only import
+    krause21_reader = csv.reader(krause21_file)
+    for line in krause21_reader:
+        print(line)
+krause21_file.close() # Closes file after use
+
 # Imported and printed vandenBerg_table2.csv file to check proper read
+with open('data/vandenBerg_table2.csv', 'r') as vandenBerg_file: # 'r' for read-only import
+    vandenBerg_reader = csv.reader(vandenBerg_file)
+    for line in vandenBerg_reader:
+        print(line)
+vandenBerg_file.close() # Closes file after use
