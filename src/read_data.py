@@ -9,6 +9,12 @@ with open('data/HarrisPartI.csv', 'r') as harrisP1_file: # 'r' for read-only imp
         print(line)
 harrisP1_file.close() # Closes file after use
 
-# Imported and printed HarrisPartIII.csv file to check proper read
+#Imported and printed HarrisPartIII.cvs file to check proper read
+with open('data/HarrisPartIII.csv', 'r') as harrisP3_file: # 'r' for read-only import
+    harrisP3_reader = csv.reader(harrisP3_file)
+    for line in harrisP3_reader:
+        print(line)
+harrisP3_file.close() # Closes file after use
+
 # Imported and printed Krause21.csv file to check proper read
 # Imported and printed vandenBerg_table2.csv file to check proper read
