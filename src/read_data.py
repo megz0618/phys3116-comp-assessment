@@ -29,3 +29,4 @@ with open('data/vandenBerg_table2.csv', 'r') as vandenBerg_file: # 'r' for read-
     for line in vandenBerg_reader:
         print(line)
 vandenBerg_file.close() # Closes file after use
+
