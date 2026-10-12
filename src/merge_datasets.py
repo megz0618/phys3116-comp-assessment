@@ -15,7 +15,7 @@ def deleteSpaces(c):
 # Read data from csv file
 harris1Data = pd.read_csv("data/HarrisPartI.csv")
 harris3Data = pd.read_csv("data/HarrisPartIII.csv")
-vandenBergData = pd.read_csv("data/vandenBerg_table2.csv")
+vandenBergData = pd.read_csv("data/vandenBergClassifications.csv")
 
 # Rename columns in VandenBerg dataset to match Harris convention 
 vandenBergData.rename(columns={'#NGC': "ID"}, inplace=True)

@@ -23,42 +23,72 @@ plt.errorbar(
 # Add labels and title
 plt.xlabel("FeH (dex)")
 plt.ylabel("Age (Gyr)")
-plt.title("Linearly Fitted Metallicity vs Age Relation for Globular Clusters in the Milky Way")
-# plt.savefig("Age_vs_Metallicity_Plot_1.png")
-# plt.show()
+plt.title("Metallicity vs Age Relation for Globular Clusters in the Milky Way")
+#plt.savefig("Age_vs_Metallicity_Plot_1.png")
+plt.show()
 
-# Label and exclude outlier from linear fitting
-vandenBergOutlier = vandenBergData[vandenBergData["Name"] == "Pal12"]
-plt.annotate(
-    "Pal12",
-    (vandenBergOutlier["FeH"].iloc[0], vandenBergOutlier["Age"].iloc[0]),
-    xytext = (10,0),
-    textcoords="offset points",
-)
-vandenBergNoOutlier = vandenBergData[vandenBergData["Name"] != "Pal12"]
-
-# Fit a linear curve, then plot
-result = stats.linregress(vandenBergNoOutlier["FeH"], vandenBergNoOutlier["Age"])
+# Fit a linear curve then plot
+result = stats.linregress(vandenBergData["FeH"], vandenBergData["Age"])
 print(result)
 print(f'Line has equation y = ...({result.slope:.2f} +- {result.stderr:.2f}) * x + ({result.intercept:.2f} +- {result.intercept_stderr:.2f})')
 print(f'Result has R-value of {result.rvalue:.2f} and p-value of {result.pvalue:.2e}')
 
 plt.plot(
-    vandenBergNoOutlier["FeH"], result.slope * vandenBergNoOutlier["FeH"] + result.intercept,
+    vandenBergData["FeH"], result.slope * vandenBergData["FeH"] + result.intercept,
     label=f'y = {result.slope:.2f} * x + {result.intercept:.2f}'
 )
 
 # Add legend, then save plot
 plt.legend()
-# plt.savefig("Age_vs_Metallicity_Plot_2.png")
-# plt.show()
+#plt.savefig("Age_vs_Metallicity_Plot_2.png")
+plt.show()
 
-# Plot standardised residuals
-standardisedAgeResiduals = (vandenBergNoOutlier["Age"] - (result.slope * vandenBergNoOutlier["FeH"] + result.intercept)) / vandenBergNoOutlier["Age_err"]
-plt.scatter(vandenBergNoOutlier["FeH"], standardisedAgeResiduals)
+# Plot normlaised residuals for each cluster
+vandenBergData["Age_residual"] = (vandenBergData["Age"] - (result.slope * vandenBergData["FeH"] + result.intercept)) / vandenBergData["Age_err"]
+plt.scatter(vandenBergData["FeH"], vandenBergData["Age_residual"])
 plt.xlabel("[Fe/H] (dex)")
-plt.ylabel("Age Residuals (Gyr)")
+plt.ylabel(r"Normalised Age Residual ($\sigma$)")
 plt.title("Residuals in Linear Fit of Metallicity vs Age Relation")
-# plt.savefig("Age_vs_Metallicity_Plot_3.png")
-# plt.show()
+#plt.savefig("Age_vs_Metallicity_Plot_3.png")
+plt.show()
 
+# Identify accreted and in-situ globular clusters based on residual
+for i in range(len(vandenBergData)):
+    sigma = vandenBergData.loc[i, "Age_residual"]
+    if((sigma > 2)):
+        vandenBergData.loc[i, "Classification"] = "In-situ"
+    elif(sigma < -2):
+        vandenBergData.loc[i, "Classification"] = "Accreted"
+    else:
+        vandenBergData.loc[i, "Classification"] = "Unresolved"
+
+# Plot residuals in colour bands
+inSitu = vandenBergData[(vandenBergData["Classification"] == 'In-situ')]
+accreted = vandenBergData[(vandenBergData["Classification"] == 'Accreted')]
+unresolved = vandenBergData[(vandenBergData["Classification"] == 'Unresolved')]
+
+plt.scatter(
+    inSitu["FeH"], inSitu["Age_residual"],
+    label='In situ'
+)
+
+plt.scatter(
+    accreted["FeH"], accreted["Age_residual"],
+    label='Accreted'
+)
+
+plt.scatter(
+    unresolved["FeH"], unresolved["Age_residual"],
+    label='Unresolved'
+)
+
+
+plt.xlabel("[Fe/H] (dex)")
+plt.ylabel(r"Normalised Age Residual ($\sigma$)")
+plt.title("Grouped Residuals in Linear Fit of Metallicity vs Age Relation")
+plt.legend(loc="lower left")
+#plt.savefig("Age_vs_Metallicity_Plot_4.png")
+plt.show()
+
+# Save predicted classifications to csv
+vandenBergData.to_csv('data/vandenBergClassifications.csv', index = False)
