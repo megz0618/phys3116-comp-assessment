@@ -25,14 +25,24 @@ plt.xlabel("FeH (dex)")
 plt.ylabel("Age (Gyr)")
 plt.title("Linearly Fitted Metallicity vs Age Relation for Globular Clusters in the Milky Way")
 
+# Label and exclude outlier from linear fitting
+vandenBergOutlier = vandenBergData[vandenBergData["Name"] == "Pal12"]
+plt.annotate(
+    "Pal12",
+    (vandenBergOutlier["FeH"].iloc[0], vandenBergOutlier["Age"].iloc[0]),
+    xytext = (10,0),
+    textcoords="offset points",
+)
+vandenBergNoOutlier = vandenBergData[vandenBergData["Name"] != "Pal12"]
+
 # Fit a linear curve, then plot
-result = stats.linregress(vandenBergData["FeH"], vandenBergData["Age"])
+result = stats.linregress(vandenBergNoOutlier["FeH"], vandenBergNoOutlier["Age"])
 print(result)
 print(f'Line has equation y = ({result.slope:.2f} +- {result.stderr:.2f}) * x + ({result.intercept:.2f} +- {result.intercept_stderr:.2f})')
 print(f'Result has R-value of {result.rvalue:.2f} and p-value of {result.pvalue:.2e}')
 
 plt.plot(
-    vandenBergData["FeH"], result.slope * vandenBergData["FeH"] + result.intercept,
+    vandenBergNoOutlier["FeH"], result.slope * vandenBergNoOutlier["FeH"] + result.intercept,
     label=f'y = {result.slope:.2f} * x + {result.intercept:.2f}'
 )
 
