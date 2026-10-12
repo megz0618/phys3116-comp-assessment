@@ -48,12 +48,24 @@ plt.errorbar(
     label = 'Average Method'
 )
 
-# Add labels, legend and title
+# Add labels and title
 plt.xlabel("FeH (dex)")
 plt.ylabel("Age (Gyr)")
-plt.legend()
-plt.title("Metallicity vs Age Relation for Globular Clusters in the Milky Way")
+plt.title("Linearly Fitted Metallicity vs Age Relation for Globular Clusters in the Milky Way")
 
-plt.savefig("Age_vs_Metallicity_Plot_1.png")
+# Fit a linear curve, then plot
+result = stats.linregress(vandenBergData["FeH"], vandenBergData["Age"])
+print(result)
+print(f'Line has equation y = ({result.slope:.2f} +- {result.stderr:.2f}) * x + ({result.intercept:.2f} +- {result.intercept_stderr:.2f})')
+print(f'Result has R-value of {result.rvalue:.2f} and p-value of {result.pvalue:.2e}')
+
+plt.plot(
+    vandenBergData["FeH"], result.slope * vandenBergData["FeH"] + result.intercept,
+    label=f'y = {result.slope:.2f} * x + {result.intercept:.2f}'
+)
+
+# Add legend, then save plot
+plt.legend()
+plt.savefig("Age_vs_Metallicity_Plot_2.png")
 plt.show()
 
