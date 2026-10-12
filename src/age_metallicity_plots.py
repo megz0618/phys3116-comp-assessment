@@ -24,6 +24,8 @@ plt.errorbar(
 plt.xlabel("FeH (dex)")
 plt.ylabel("Age (Gyr)")
 plt.title("Linearly Fitted Metallicity vs Age Relation for Globular Clusters in the Milky Way")
+# plt.savefig("Age_vs_Metallicity_Plot_1.png")
+# plt.show()
 
 # Label and exclude outlier from linear fitting
 vandenBergOutlier = vandenBergData[vandenBergData["Name"] == "Pal12"]
@@ -49,15 +51,14 @@ plt.plot(
 # Add legend, then save plot
 plt.legend()
 # plt.savefig("Age_vs_Metallicity_Plot_2.png")
-plt.show()
+# plt.show()
 
 # Plot standardised residuals
-ageResiduals = vandenBergNoOutlier["Age"] - (result.slope * vandenBergNoOutlier["FeH"] + result.intercept)
-standardisedAgeResiduals = ageResiduals / vandenBergNoOutlier["Age_err"]
+standardisedAgeResiduals = (vandenBergNoOutlier["Age"] - (result.slope * vandenBergNoOutlier["FeH"] + result.intercept)) / vandenBergNoOutlier["Age_err"]
 plt.scatter(vandenBergNoOutlier["FeH"], standardisedAgeResiduals)
 plt.xlabel("[Fe/H] (dex)")
 plt.ylabel("Age Residuals (Gyr)")
 plt.title("Residuals in Linear Fit of Metallicity vs Age Relation")
-plt.savefig("Age_vs_Metallicity_Plot_3.png")
-plt.show()
+# plt.savefig("Age_vs_Metallicity_Plot_3.png")
+# plt.show()
 
