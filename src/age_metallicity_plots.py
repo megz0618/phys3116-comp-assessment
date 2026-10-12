@@ -38,7 +38,7 @@ vandenBergNoOutlier = vandenBergData[vandenBergData["Name"] != "Pal12"]
 # Fit a linear curve, then plot
 result = stats.linregress(vandenBergNoOutlier["FeH"], vandenBergNoOutlier["Age"])
 print(result)
-print(f'Line has equation y = ({result.slope:.2f} +- {result.stderr:.2f}) * x + ({result.intercept:.2f} +- {result.intercept_stderr:.2f})')
+print(f'Line has equation y = ...({result.slope:.2f} +- {result.stderr:.2f}) * x + ({result.intercept:.2f} +- {result.intercept_stderr:.2f})')
 print(f'Result has R-value of {result.rvalue:.2f} and p-value of {result.pvalue:.2e}')
 
 plt.plot(
@@ -48,6 +48,16 @@ plt.plot(
 
 # Add legend, then save plot
 plt.legend()
-plt.savefig("Age_vs_Metallicity_Plot_2.png")
+# plt.savefig("Age_vs_Metallicity_Plot_2.png")
+plt.show()
+
+# Plot standardised residuals
+ageResiduals = vandenBergNoOutlier["Age"] - (result.slope * vandenBergNoOutlier["FeH"] + result.intercept)
+standardisedAgeResiduals = ageResiduals / vandenBergNoOutlier["Age_err"]
+plt.scatter(vandenBergNoOutlier["FeH"], standardisedAgeResiduals)
+plt.xlabel("[Fe/H] (dex)")
+plt.ylabel("Age Residuals (Gyr)")
+plt.title("Residuals in Linear Fit of Metallicity vs Age Relation")
+plt.savefig("Age_vs_Metallicity_Plot_3.png")
 plt.show()
 
