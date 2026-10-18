@@ -25,4 +25,4 @@ plt.xlabel('Galactic Longitude (deg)') # x-axis label
 plt.ylabel('Velocity (LSR) (km/s)') # y-axis label
 plt.show()
 
-#Plot error bars using the v_r_e column - Do later
+# Plot error bars using the v_r_e column - Do later
