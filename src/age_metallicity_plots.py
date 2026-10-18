@@ -82,7 +82,6 @@ plt.scatter(
     label='Unresolved'
 )
 
-
 plt.xlabel("[Fe/H] (dex)")
 plt.ylabel(r"Normalised Age Residual ($\sigma$)")
 plt.title("Grouped Residuals in Linear Fit of Metallicity vs Age Relation")
