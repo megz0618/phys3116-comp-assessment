@@ -49,11 +49,11 @@ plt.plot(
 # plt.colorbar(sigma0, label="Log of Central Density Measure (units)")
 
 # Add colourbar for |Z|
-data = pd.read_csv("data/mergedData.csv")
-vb = data[data["Age"].notna()].copy()
-z = plt.scatter(vb["FeH"], vb["Age"], c = vb["Z"].abs(),
-                cmap = "viridis", marker = "*", s=80, zorder = 3)
-plt.colorbar(z, label="|Z| (kpc)")
+# data = pd.read_csv("data/mergedData.csv")
+# vb = data[data["Age"].notna()].copy()
+# z = plt.scatter(vb["FeH"], vb["Age"], c = vb["Z"].abs(),
+#                 cmap = "viridis", marker = "*", s=80, zorder = 3)
+# plt.colorbar(z, label="|Z| (kpc)")
 
 # Add labels and title
 plt.xlabel("FeH (dex)")
