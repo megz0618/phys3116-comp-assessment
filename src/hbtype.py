@@ -28,20 +28,29 @@ plt.plot(
 )
 
 # Add colourbar for HBType values 
-hbtype = plt.scatter(
-    vandenBergData["FeH"], vandenBergData["Age"],
-    c = vandenBergData["HBtype"], cmap = "RdBu", marker = '*', s = 80, zorder = 3
+#hbtype = plt.scatter(
+ #   vandenBergData["FeH"], vandenBergData["Age"],
+  #  c = vandenBergData["HBtype"], cmap = "RdBu", marker = '*', s = 80, zorder = 3
+#)
+#plt.colorbar(hbtype, label="HB type")
+
+
+# Add colourbar for R_G values 
+rg = plt.scatter(
+   vandenBergData["FeH"], vandenBergData["Age"],
+   c = vandenBergData["R_G"], cmap = "viridis", marker = '*', s = 80, zorder = 3
 )
-plt.colorbar(hbtype, label="HB type")
+plt.colorbar(rg, label="Galactocentric Radius (kpc)")
 
 # Add labels and title
 plt.xlabel("FeH (dex)")
 plt.ylabel("Age (Gyr)")
-plt.title("Metallicity vs Age Relation with HBType for Globular Clusters in the Milky Way")
+plt.title("Metallicity vs Age Relation with Galactocentric Radius for Globular Clusters in the Milky Way")
 
 # Add legend
 plt.legend()
 
 # Show and save
+plt.tight_layout()
 plt.show()
-plt.savefig("Age_vs_Metallicity_Plot_5.png")
+plt.savefig("Age_vs_Metallicity_Plot_6.png")
