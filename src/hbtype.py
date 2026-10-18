@@ -28,11 +28,11 @@ plt.plot(
 )
 
 # Add colourbar for HBType values 
-hbtype = plt.scatter(
-    vandenBergData["FeH"], vandenBergData["Age"],
-    c = vandenBergData["HBtype"], cmap = "RdBu", marker = '*', s = 80, zorder = 3
-)
-plt.colorbar(hbtype, label="HB type")
+# hbtype = plt.scatter(
+#     vandenBergData["FeH"], vandenBergData["Age"],
+#     c = vandenBergData["HBtype"], cmap = "RdBu", marker = '*', s = 80, zorder = 3
+# )
+# plt.colorbar(hbtype, label="HB type")
 
 # Add colourbar for R_G values 
 # rg = plt.scatter(
@@ -48,14 +48,21 @@ plt.colorbar(hbtype, label="HB type")
 # )
 # plt.colorbar(sigma0, label="Log of Central Density Measure (units)")
 
+# Add colourbar for |Z|
+data = pd.read_csv("data/mergedData.csv")
+vb = data[data["Age"].notna()].copy()
+z = plt.scatter(vb["FeH"], vb["Age"], c = vb["Z"].abs(),
+                cmap = "viridis", marker = "*", s=80, zorder = 3)
+plt.colorbar(z, label="|Z| (kpc)")
+
 # Add labels and title
 plt.xlabel("FeH (dex)")
 plt.ylabel("Age (Gyr)")
-plt.title("Metallicity vs Age Relation with HB type\nfor Globular Clusters in the Milky Way")
+plt.title("Metallicity vs Age Relation with Vertical Distance\nfor Globular Clusters in the Milky Way")
 # Add legend
 plt.legend()
 
 # Show and save
 plt.tight_layout()
-plt.savefig("Age_vs_Metallicity_Plot_5.png")
+plt.savefig("Age_vs_Metallicity_Plot_8.png")
 plt.show()
