@@ -43,7 +43,7 @@ plt.legend()
 #plt.savefig("Age_vs_Metallicity_Plot_2.png")
 plt.show()
 
-# Plot normlaised residuals for each cluster
+# Plot normalised residuals for each cluster
 vandenBergData["Age_residual"] = (vandenBergData["Age"] - (result.slope * vandenBergData["FeH"] + result.intercept)) / vandenBergData["Age_err"]
 plt.scatter(vandenBergData["FeH"], vandenBergData["Age_residual"])
 plt.xlabel("[Fe/H] (dex)")
@@ -56,16 +56,16 @@ plt.show()
 for i in range(len(vandenBergData)):
     sigma = vandenBergData.loc[i, "Age_residual"]
     if((sigma > 2)):
-        vandenBergData.loc[i, "Classification"] = "In-situ"
+        vandenBergData.loc[i, "Classification_AMR"] = "In-situ"
     elif(sigma < -2):
-        vandenBergData.loc[i, "Classification"] = "Accreted"
+        vandenBergData.loc[i, "Classification_AMR"] = "Accreted"
     else:
-        vandenBergData.loc[i, "Classification"] = "Unresolved"
+        vandenBergData.loc[i, "Classification_AMR"] = "Unresolved"
 
 # Plot residuals in colour bands
-inSitu = vandenBergData[(vandenBergData["Classification"] == 'In-situ')]
-accreted = vandenBergData[(vandenBergData["Classification"] == 'Accreted')]
-unresolved = vandenBergData[(vandenBergData["Classification"] == 'Unresolved')]
+inSitu = vandenBergData[(vandenBergData["Classification_AMR"] == 'In-situ')]
+accreted = vandenBergData[(vandenBergData["Classification_AMR"] == 'Accreted')]
+unresolved = vandenBergData[(vandenBergData["Classification_AMR"] == 'Unresolved')]
 
 plt.scatter(
     inSitu["FeH"], inSitu["Age_residual"],

@@ -60,9 +60,9 @@ vb = data[data["Age"].notna()].copy() # Isolate just VandenBerg data
 s = vb[(vb["FeH"] > -1.5) & (vb["FeH"] < -1.0)] # Isolate region between -1.5 and -1.0 metallicity (where branching is clearest)
 
 # Isolate and label upper and lower outliers from Metallicity-Age relation
-young = s[s["Age_residual"] < -2]
-old = s[s["Age_residual"] > 2]
-outliers = pd.concat([young, old])
+accreted = s[s["Age_residual"] < -2]
+inSitu = s[s["Age_residual"] > 2]
+outliers = pd.concat([accreted, inSitu])
 
 for name, x, y in zip(outliers["ID"], outliers["FeH"], outliers["Age"]):
     annot = plt.annotate(name, xy = (x,y), xytext = (5,5), textcoords = "offset points", arrowprops=dict(arrowstyle="->", color="black", lw=0.5))
@@ -74,11 +74,26 @@ plt.ylabel("Age (Gyr)")
 plt.title("Metallicity vs Age Relation with HB Type\nfor Globular Clusters in the Milky Way")
 
 # Add legend
-plt.scatter(young["FeH"], young["Age"], color="red", marker="*", s=30, zorder=4, label="Possibly accreted")
-plt.scatter(old["FeH"], old["Age"], color="green", marker="*", s=30, zorder=5, label="Possibly in-situ")
+plt.scatter(accreted["FeH"], accreted["Age"], color="red", marker="*", s=30, zorder=4, label="Possibly accreted")
+plt.scatter(inSitu["FeH"], inSitu["Age"], color="green", marker="*", s=30, zorder=5, label="Possibly in-situ")
 plt.legend(loc="lower left")
 
 # Show and save
 plt.tight_layout()
 # plt.savefig("Age_vs_Metallicity_Plot_8a.png")
 plt.show()
+
+# Add classifications as Classification_HBType to mergedData.csv
+for i in range(len(data)):
+    ID = data.loc[i, "ID"]
+    if(ID in inSitu["ID"].values):
+        data.loc[i, "Classification_HBType"] = "In-situ"
+    elif(ID in accreted["ID"].values):
+        data.loc[i, "Classification_HBType"] = "Accreted"
+    else:
+        data.loc[i, "Classification_HBType"] = "Unresolved"
+
+# Save predicted classifications to merged csv
+data.to_csv('data/mergedData.csv', index = False)
+
+
