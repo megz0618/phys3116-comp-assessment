@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy import stats
-from scipy.signal import find_peaks
+from adjustText import adjust_text
 
 # Plot vandenBerg data with error in age, using separate colours for different methods
 # Read data from csv file
@@ -14,7 +14,7 @@ plt.errorbar(
     vandenBergData["FeH"],
     vandenBergData["Age"],
     yerr = vandenBergData["Age_err"],
-    fmt = 'none', 
+    fmt = '*', 
     ecolor = 'gray',
     markersize = 6,
     capsize = 2,
@@ -23,8 +23,7 @@ plt.errorbar(
 # Fit a linear curve then plot
 result = stats.linregress(vandenBergData["FeH"], vandenBergData["Age"])
 plt.plot(
-    vandenBergData["FeH"], result.slope * vandenBergData["FeH"] + result.intercept,
-    label=f'y = {result.slope:.2f} * x + {result.intercept:.2f}'
+    vandenBergData["FeH"], result.slope * vandenBergData["FeH"] + result.intercept
 )
 
 # Add colourbar for HBType values 
@@ -55,14 +54,31 @@ plt.plot(
 #                 cmap = "viridis", marker = "*", s=80, zorder = 3)
 # plt.colorbar(z, label="|Z| (kpc)")
 
+data = pd.read_csv("data/mergedData.csv")
+vb = data[data["Age"].notna()].copy() # Isolate just VandenBerg data
+
+s = vb[(vb["FeH"] > -1.5) & (vb["FeH"] < -1.0)] # Isolate region between -1.5 and -1.0 metallicity (where branching is clearest)
+
+# Isolate and label upper and lower outliers from Metallicity-Age relation
+young = s[s["Age_residual"] < -2]
+old = s[s["Age_residual"] > 2]
+outliers = pd.concat([young, old])
+
+for name, x, y in zip(outliers["ID"], outliers["FeH"], outliers["Age"]):
+    annot = plt.annotate(name, xy = (x,y), xytext = (5,5), textcoords = "offset points", arrowprops=dict(arrowstyle="->", color="black", lw=0.5))
+    annot.draggable(True)
+
 # Add labels and title
 plt.xlabel("FeH (dex)")
 plt.ylabel("Age (Gyr)")
-plt.title("Metallicity vs Age Relation with Vertical Distance\nfor Globular Clusters in the Milky Way")
+plt.title("Metallicity vs Age Relation with HB Type\nfor Globular Clusters in the Milky Way")
+
 # Add legend
-plt.legend()
+plt.scatter(young["FeH"], young["Age"], color="red", marker="*", s=30, zorder=4, label="Possibly accreted")
+plt.scatter(old["FeH"], old["Age"], color="green", marker="*", s=30, zorder=5, label="Possibly in-situ")
+plt.legend(loc="lower left")
 
 # Show and save
 plt.tight_layout()
-plt.savefig("Age_vs_Metallicity_Plot_8.png")
+# plt.savefig("Age_vs_Metallicity_Plot_8a.png")
 plt.show()
