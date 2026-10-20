@@ -23,7 +23,8 @@ plt.errorbar(
 # Fit a linear curve then plot
 result = stats.linregress(vandenBergData["FeH"], vandenBergData["Age"])
 plt.plot(
-    vandenBergData["FeH"], result.slope * vandenBergData["FeH"] + result.intercept
+    vandenBergData["FeH"], result.slope * vandenBergData["FeH"] + result.intercept,
+    label='Linear fit', color = 'orange'
 )
 
 # Add colourbar for HBType values 
@@ -57,11 +58,14 @@ plt.plot(
 data = pd.read_csv("data/mergedData.csv")
 vb = data[data["Age"].notna()].copy() # Isolate just VandenBerg data
 
-s = vb[(vb["FeH"] > -1.5) & (vb["FeH"] < -1.0)] # Isolate region between -1.5 and -1.0 metallicity (where branching is clearest)
+# s = vb[(vb["FeH"] > -1.5) & (vb["FeH"] < -1.0)] # Isolate region between -1.5 and -1.0 metallicity (where branching is clearest)
+# # Add vertical lines at these thresholds
+# plt.axvline(x=-1.5, color='black', linestyle='--', linewidth=1, label='[Fe/H] = -1.5 (dex)')
+# plt.axvline(x=-1.0, color='black', linestyle='--', linewidth=1, label='[Fe/H] = -1.0 (dex)')
 
 # Isolate and label upper and lower outliers from Metallicity-Age relation
-accreted = s[s["Age_residual"] < -2]
-inSitu = s[s["Age_residual"] > 2]
+accreted = vb[(vb["Age_residual"] < -2) & (vb["Z"].abs() > 3)]
+inSitu = vb[(vb["Age_residual"] > 2) & (vb["Z"].abs() <= 3)]
 outliers = pd.concat([accreted, inSitu])
 
 for name, x, y in zip(outliers["ID"], outliers["FeH"], outliers["Age"]):
@@ -69,29 +73,29 @@ for name, x, y in zip(outliers["ID"], outliers["FeH"], outliers["Age"]):
     annot.draggable(True)
 
 # Add labels and title
-plt.xlabel("FeH (dex)")
+plt.xlabel("[Fe/H] (dex)")
 plt.ylabel("Age (Gyr)")
-plt.title("Metallicity vs Age Relation with HB Type\nfor Globular Clusters in the Milky Way")
+plt.title("GC Classifications using Age vs Metallicity Relation \n and Vertical Distance Data")
 
-# Add legend
-plt.scatter(accreted["FeH"], accreted["Age"], color="red", marker="*", s=30, zorder=4, label="Possibly accreted")
-plt.scatter(inSitu["FeH"], inSitu["Age"], color="green", marker="*", s=30, zorder=5, label="Possibly in-situ")
+# # Add legend
+plt.scatter(accreted["FeH"], accreted["Age"], color="orange", marker="*", s=60, zorder=4, label="Possibly accreted")
+plt.scatter(inSitu["FeH"], inSitu["Age"], color="green", marker="*", s=60, zorder=4, label="Possibly in-situ")
 plt.legend(loc="lower left")
 
 # Show and save
 plt.tight_layout()
-# plt.savefig("Age_vs_Metallicity_Plot_8a.png")
+# plt.savefig("Age_vs_Metallicity_GCR.png")
 plt.show()
 
 # Add classifications as Classification_HBType to mergedData.csv
 for i in range(len(data)):
     ID = data.loc[i, "ID"]
     if(ID in inSitu["ID"].values):
-        data.loc[i, "Classification_HBType"] = "In-situ"
+        data.loc[i, "Classification_Z"] = "In-situ"
     elif(ID in accreted["ID"].values):
-        data.loc[i, "Classification_HBType"] = "Accreted"
+        data.loc[i, "Classification_Z"] = "Accreted"
     else:
-        data.loc[i, "Classification_HBType"] = "Unresolved"
+        data.loc[i, "Classification_Z"] = "Unresolved"
 
 # Save predicted classifications to merged csv
 data.to_csv('data/mergedData.csv', index = False)
