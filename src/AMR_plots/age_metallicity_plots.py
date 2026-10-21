@@ -21,11 +21,10 @@ plt.errorbar(
 )
 
 # Add labels and title
-plt.xlabel("FeH (dex)")
+plt.xlabel("[Fe/H] (dex)")
 plt.ylabel("Age (Gyr)")
-plt.title("Metallicity vs Age Relation for Globular Clusters in the Milky Way")
-#plt.savefig("Age_vs_Metallicity_Plot_1.png")
-plt.show()
+plt.title("Age vs Metallicity Relation")
+plt.savefig("Age_vs_Metallicity.png")
 
 # Fit a linear curve then plot
 result = stats.linregress(vandenBergData["FeH"], vandenBergData["Age"])
@@ -40,32 +39,32 @@ plt.plot(
 
 # Add legend, then save plot
 plt.legend()
-#plt.savefig("Age_vs_Metallicity_Plot_2.png")
+plt.savefig("Age_vs_Metallicity_Linear_Fit.png")
 plt.show()
 
-# Plot normlaised residuals for each cluster
+# Plot normalised residuals for each cluster
 vandenBergData["Age_residual"] = (vandenBergData["Age"] - (result.slope * vandenBergData["FeH"] + result.intercept)) / vandenBergData["Age_err"]
 plt.scatter(vandenBergData["FeH"], vandenBergData["Age_residual"])
 plt.xlabel("[Fe/H] (dex)")
 plt.ylabel(r"Normalised Age Residual ($\sigma$)")
-plt.title("Residuals in Linear Fit of Metallicity vs Age Relation")
-#plt.savefig("Age_vs_Metallicity_Plot_3.png")
+plt.title("Residuals in Linear Fit of Age vs Metallicity Relation")
+plt.savefig("Age_vs_Metallicity_Residuals.png")
 plt.show()
 
 # Identify accreted and in-situ globular clusters based on residual
 for i in range(len(vandenBergData)):
     sigma = vandenBergData.loc[i, "Age_residual"]
     if((sigma > 2)):
-        vandenBergData.loc[i, "Classification"] = "In-situ"
+        vandenBergData.loc[i, "Classification_AMR"] = "In-situ"
     elif(sigma < -2):
-        vandenBergData.loc[i, "Classification"] = "Accreted"
+        vandenBergData.loc[i, "Classification_AMR"] = "Accreted"
     else:
-        vandenBergData.loc[i, "Classification"] = "Unresolved"
+        vandenBergData.loc[i, "Classification_AMR"] = "Unresolved"
 
 # Plot residuals in colour bands
-inSitu = vandenBergData[(vandenBergData["Classification"] == 'In-situ')]
-accreted = vandenBergData[(vandenBergData["Classification"] == 'Accreted')]
-unresolved = vandenBergData[(vandenBergData["Classification"] == 'Unresolved')]
+inSitu = vandenBergData[(vandenBergData["Classification_AMR"] == 'In-situ')]
+accreted = vandenBergData[(vandenBergData["Classification_AMR"] == 'Accreted')]
+unresolved = vandenBergData[(vandenBergData["Classification_AMR"] == 'Unresolved')]
 
 plt.scatter(
     inSitu["FeH"], inSitu["Age_residual"],
@@ -82,12 +81,11 @@ plt.scatter(
     label='Unresolved'
 )
 
-
 plt.xlabel("[Fe/H] (dex)")
 plt.ylabel(r"Normalised Age Residual ($\sigma$)")
-plt.title("Grouped Residuals in Linear Fit of Metallicity vs Age Relation")
+plt.title("Grouped Residuals in Linear Fit of Age vs Metallicity Relation")
 plt.legend(loc="lower left")
-#plt.savefig("Age_vs_Metallicity_Plot_4.png")
+plt.savefig("Age_vs_Metallicity_Grouped_Residuals.png")
 plt.show()
 
 # Save predicted classifications to csv

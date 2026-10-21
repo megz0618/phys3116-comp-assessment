@@ -1,4 +1,4 @@
-#NGC,Name,FeH,Age,Age_err,Method,Figs,Range,HBtype,R_G,M_V,v_e0,log_sigma_0,Age_residual,Classification
+#NGC,Name,FeH,Age,Age_err,Method,Figs,Range,HBtype,R_G,M_V,v_e0,log_sigma_0,Age_residual,Classification_AMR
 104,47Tuc,-0.76,11.75,0.25,V,14,11.50–11.75,-0.99,7.4,-9.42,54.8,5.061,2.2813784947708413,In-situ
 288,XXXX,-1.32,11.5,0.38,H,24,,0.98,12.0,-6.75,10.9,2.953,-0.682616977776699,Unresolved
 362,XXXX,-1.3,10.75,0.25,V,13,10.75–11.00,-0.87,9.4,-8.43,44.4,4.938,-3.9547579383280365,Accreted
