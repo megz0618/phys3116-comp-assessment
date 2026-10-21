@@ -58,6 +58,7 @@ plt.xlabel('Galactic Longitude (deg)')
 plt.ylabel('Velocity (LSR) (km/s)')
 plt.title('Velocity_LSR vs. Galactic Longitude') # Title of graph
 plt.legend()
+#plt.savefig("Velocity_LSR vs. Galactic Longitude.png")
 plt.show()
 print(ID[outlier])
 
@@ -88,6 +89,7 @@ plt.xlabel('R = (x^2 + y^2)^(1/2) (kpc)')
 plt.ylabel('|Z| (kpc)')
 plt.title('R vs |Z|') 
 plt.legend()    
+#plt.savefig("R vs abs(Z) With Velocity Outliers.png")
 plt.show()
 
 #Graph 2: Z vs. X with outliers plotted
@@ -106,6 +108,7 @@ plt.legend()
 #Limit x and y axis to between -25 and 25 to match the plots from  the paper so they can be compared easier. 
 plt.xlim(-25, 25)
 plt.ylim(-25, 25)
+#plt.savefig("Z vs X With Velocity Outliers.png")
 plt.show()
 
 #Graph 3: Y vs. X with outliers plotted
@@ -121,6 +124,7 @@ plt.ylabel('Y (kpc)')
 plt.title('Y vs X') 
 plt.legend()
 #Not limiting axis for this plot as one of the outliers (NGC7006) is outisde the range -25 - 25, but limiting it makes the positions of the other outliers more obvious. 
+#plt.savefig("Y vs X With Velocity Outliers.png")
 plt.show()
 
 #Graph 4: Y vs. X with outliers plotted and y-axis limited
@@ -133,9 +137,10 @@ for i in np.where(outlier)[0]: #Find where outlier array is true
     plt.annotate(ID[i], (X[i], Y[i])) 
 plt.xlabel('X (kpc)')
 plt.ylabel('Y (kpc)')
-plt.title('Y vs X (Y-Axis -25 to 25)') 
+plt.title('Y vs X (Y-Axis -25 to 25) With Velocity Outliers') 
 plt.legend()
 #Limit y-axis to -25 to 25 for easier comparison with paper: 
 plt.xlim(-25, 25)
 plt.ylim(-25, 25)
+#plt.savefig("Y vs X (Y-Axis -25 to 25) With Velocity Outliers.png")
 plt.show()
