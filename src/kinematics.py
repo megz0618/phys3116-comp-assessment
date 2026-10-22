@@ -36,14 +36,14 @@ best_parameters, covariance = curve_fit(model, galactic_longitude, velocity_lsr)
 residual = velocity_lsr - model(galactic_longitude, best_parameters[0], best_parameters[1], best_parameters[2]) #Difference between data and model for each point
 std_residual  = np.std(residual) 
 outlier  = np.abs(residual) > 2 * std_residual #Let outliers be any point more than 2 standard deviations from model. 
-#^Gives array of true and falses for each GC - True = Outlier
+#Outlier is an array of true and falses for each GC - True = Outlier, False = Non-outlier 
 
 plt.scatter(galactic_longitude[~outlier], velocity_lsr[~outlier], marker ='*', s = 50, label = 'Within 2std', color = 'blue')
 #The points with a true index from outlier will be plotted. ~ flips array, so all trues become falses and vice versa. So plot all the falses (non-outliers) first .
 plt.scatter(galactic_longitude[outlier], velocity_lsr[outlier], marker ='*', s = 90, color = 'red', label='Outliers (>2std)')
 #Plot GCs with true index, which are the outliers.
 
-#Plot curve of best fit:  
+#Plot the sinusoidal curve of best fit:  
 l_values = np.linspace(0, 360, 361) #Array of degrees from 0 - 360, x values. 
 curve = model(l_values, best_parameters[0], best_parameters[1], best_parameters[2]) # a = best_parameters[0], etc. Feed into model function. 
 plt.plot(l_values, curve, 'k-', label = 'Curve of Best Fit') #Add the sine curve of best fit to scatter plot as a black line
@@ -52,14 +52,18 @@ plt.fill_between(l_values, curve - 2*std_residual, curve + 2*std_residual, alpha
 
 #Label outliers with their ID on graph:
 for i in np.where(outlier)[0]: #Find where outlier array is true
-    plt.annotate(ID[i], (galactic_longitude[i], velocity_lsr[i])) 
+    label = plt.annotate(ID[i], (galactic_longitude[i], velocity_lsr[i]), arrowprops=dict(arrowstyle="->", color="black", lw=0.5)) 
     #plt.annotate(Text, (x coordinate, y coordinate))
+    label.draggable(True)
+
 plt.xlabel('Galactic Longitude (deg)')
 plt.ylabel('Velocity (LSR) (km/s)')
 plt.title('Velocity_LSR vs. Galactic Longitude') # Title of graph
 plt.legend()
-#plt.savefig("Velocity_LSR vs. Galactic Longitude.png")
+
+fig = plt.gcf() #Get current figure
 plt.show()
+#fig.savefig("Velocity_LSR vs. Galactic Longitude.png")
 print(ID[outlier])
 
 #NEXT: Add spatial plots from paper and identify the outliers from the above graph on those spatial plots to confirm if they are actually accreted. 
@@ -84,13 +88,17 @@ plt.loglog(R[~outlier], abs_z[~outlier], linestyle='None', marker = '*' ,markers
 plt.loglog(R[outlier], abs_z[outlier],linestyle='None', marker = '*' ,markersize='10',color = 'red', label='Outliers')
 #Label outliers with their ID on graph:
 for i in np.where(outlier)[0]: #Find where outlier array is true
-    plt.annotate(ID[i], (R[i], abs_z[i])) 
+    label = plt.annotate(ID[i], (R[i], abs_z[i]), arrowprops=dict(arrowstyle="->", color="black", lw=0.5)) 
+    label.draggable(True)
+
 plt.xlabel('R = (x^2 + y^2)^(1/2) (kpc)')
 plt.ylabel('|Z| (kpc)')
-plt.title('R vs |Z|') 
-plt.legend()    
-#plt.savefig("R vs abs(Z) With Velocity Outliers.png")
-plt.show()
+plt.title('R vs |Z| With Velocity Outliers') 
+plt.legend()  
+
+fig = plt.gcf() #Get current figure; Assign plot to fig variable so plot isn't erased after executing plt.show()
+plt.show() #Show plot to drag the labels.
+fig.savefig("R vs abs(Z) With Velocity Outliers.png") #Save fig as a figure. 
 
 #Graph 2: Z vs. X with outliers plotted
 #Plot the non-outliers in blue:
@@ -100,16 +108,20 @@ plt.scatter(X[outlier], Z[outlier], marker = '*', color = 'red', s = 50, label =
 
 #Add IDs as labels:
 for i in np.where(outlier)[0]: #Find where outlier array is true
-    plt.annotate(ID[i], (X[i], Z[i])) 
+    label = plt.annotate(ID[i], (X[i], Z[i]), arrowprops=dict(arrowstyle="->", color="black", lw=0.5)) 
+    label.draggable(True)
+
 plt.xlabel('X (kpc)')
 plt.ylabel('Z (kpc)')
-plt.title('Z vs X') 
+plt.title('Z vs X With Velocity Outliers') 
 plt.legend()
 #Limit x and y axis to between -25 and 25 to match the plots from  the paper so they can be compared easier. 
 plt.xlim(-25, 25)
 plt.ylim(-25, 25)
-#plt.savefig("Z vs X With Velocity Outliers.png")
+
+fig = plt.gcf()
 plt.show()
+fig.savefig("Z vs X With Velocity Outliers.png")
 
 #Graph 3: Y vs. X with outliers plotted
 #Plot non outliers
@@ -118,14 +130,18 @@ plt.scatter(X[~outlier], Y[~outlier], marker = '*',color='blue', s = 50, label =
 plt.scatter(X[outlier], Y[outlier], marker = '*', color = 'red', s = 50, label = 'Outliers')
 #Label the outliers with their IDs
 for i in np.where(outlier)[0]: #Find where outlier array is true
-    plt.annotate(ID[i], (X[i], Y[i])) 
+    label = plt.annotate(ID[i], (X[i], Y[i]), arrowprops=dict(arrowstyle="->", color="black", lw=0.5)) 
+    label.draggable(True)
+
 plt.xlabel('X (kpc)')
 plt.ylabel('Y (kpc)')
-plt.title('Y vs X') 
+plt.title('Y vs X With Velocity Outliers') 
 plt.legend()
 #Not limiting axis for this plot as one of the outliers (NGC7006) is outisde the range -25 - 25, but limiting it makes the positions of the other outliers more obvious. 
-#plt.savefig("Y vs X With Velocity Outliers.png")
+
+fig = plt.gcf()
 plt.show()
+fig.savefig("Y vs X With Velocity Outliers.png")
 
 #Graph 4: Y vs. X with outliers plotted and y-axis limited
 #Plot non outliers
@@ -134,13 +150,17 @@ plt.scatter(X[~outlier], Y[~outlier], marker = '*',color='blue', s = 50, label =
 plt.scatter(X[outlier], Y[outlier], marker = '*', color = 'red', s = 50, label = 'Outliers')
 #Label the outliers with their IDs
 for i in np.where(outlier)[0]: #Find where outlier array is true
-    plt.annotate(ID[i], (X[i], Y[i])) 
+    label = plt.annotate(ID[i], (X[i], Y[i]), arrowprops=dict(arrowstyle="->", color="black", lw=0.5)) 
+    label.draggable(True)
+
 plt.xlabel('X (kpc)')
-plt.ylabel('Y (kpc)')
-plt.title('Y vs X (Y-Axis -25 to 25) With Velocity Outliers') 
+plt.ylabel('Y (kpc) (-25 to 25)')
+plt.title('Y vs X With Velocity Outliers') 
 plt.legend()
 #Limit y-axis to -25 to 25 for easier comparison with paper: 
 plt.xlim(-25, 25)
 plt.ylim(-25, 25)
-#plt.savefig("Y vs X (Y-Axis -25 to 25) With Velocity Outliers.png")
+
+fig = plt.gcf()
 plt.show()
+fig.savefig("Y (-25 to 25) vs X With Velocity Outliers.png")
