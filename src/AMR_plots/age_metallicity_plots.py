@@ -24,7 +24,7 @@ plt.errorbar(
 plt.xlabel("[Fe/H] (dex)")
 plt.ylabel("Age (Gyr)")
 plt.title("Age vs Metallicity Relation")
-plt.savefig("Age_vs_Metallicity.png")
+# plt.savefig("Age_vs_Metallicity.png")
 
 # Fit a linear curve then plot
 result = stats.linregress(vandenBergData["FeH"], vandenBergData["Age"])
@@ -39,7 +39,7 @@ plt.plot(
 
 # Add legend, then save plot
 plt.legend()
-plt.savefig("Age_vs_Metallicity_Linear_Fit.png")
+# plt.savefig("Age_vs_Metallicity_Linear_Fit.png")
 plt.show()
 
 # Plot normalised residuals for each cluster
@@ -48,7 +48,7 @@ plt.scatter(vandenBergData["FeH"], vandenBergData["Age_residual"])
 plt.xlabel("[Fe/H] (dex)")
 plt.ylabel(r"Normalised Age Residual ($\sigma$)")
 plt.title("Residuals in Linear Fit of Age vs Metallicity Relation")
-plt.savefig("Age_vs_Metallicity_Residuals.png")
+# plt.savefig("Age_vs_Metallicity_Residuals.png")
 plt.show()
 
 # Identify accreted and in-situ globular clusters based on residual
@@ -83,9 +83,9 @@ plt.scatter(
 
 plt.xlabel("[Fe/H] (dex)")
 plt.ylabel(r"Normalised Age Residual ($\sigma$)")
-plt.title("Grouped Residuals in Linear Fit of Age vs Metallicity Relation")
+plt.title("GC Classifications using Residuals from Linear Fit \n of Age vs Metallicity Relation")
 plt.legend(loc="lower left")
-plt.savefig("Age_vs_Metallicity_Grouped_Residuals.png")
+#plt.savefig("Age_vs_Metallicity_Grouped_Residuals.png")
 plt.show()
 
 # Save predicted classifications to csv
