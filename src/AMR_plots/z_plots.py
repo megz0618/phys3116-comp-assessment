@@ -16,6 +16,7 @@ plt.errorbar(
     yerr = vandenBergData["Age_err"],
     fmt = '*', 
     ecolor = 'gray',
+    color = 'lightgray',
     markersize = 6,
     capsize = 2,
 )
@@ -49,11 +50,11 @@ for name, x, y in zip(outliers["ID"], outliers["FeH"], outliers["Age"]):
 # Add labels and title
 plt.xlabel("[Fe/H] (dex)")
 plt.ylabel("Age (Gyr)")
-plt.title("GC Classifications using Age vs Metallicity Relation \n and Vertical Distance Data")
+plt.title("GC Classifications using Vertical Distance Data \n on Age vs Metallicity Relation")
 
 # Add legend
-plt.scatter(accreted["FeH"], accreted["Age"], color="orange", marker="*", s=60, zorder=4, label="Possibly accreted")
-plt.scatter(inSitu["FeH"], inSitu["Age"], color="green", marker="*", s=60, zorder=4, label="Possibly in-situ")
+plt.scatter(accreted["FeH"], accreted["Age"], color="C1", marker="*", s=60, zorder=4, label="Possibly accreted")
+plt.scatter(inSitu["FeH"], inSitu["Age"], color="C0", marker="*", s=60, zorder=4, label="Possibly in-situ")
 plt.legend(loc="lower left")
 
 # Show and save

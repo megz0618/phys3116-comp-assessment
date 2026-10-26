@@ -129,7 +129,7 @@ unresolved = vandenBergData[(vandenBergData["Classification_AMR"] == 'Unresolved
 
 plt.scatter(
     inSitu["FeH"], inSitu["Age"],
-    label = 'In situ',
+    label = 'Possibly in situ',
     marker = '*',
     color = 'C0',
     s = 60,
@@ -138,7 +138,7 @@ plt.scatter(
 
 plt.scatter(
     accreted["FeH"], accreted["Age"],
-    label = 'Accreted',
+    label = 'Possibly accreted',
     marker = '*', 
     color = 'C1',
     s = 60,
