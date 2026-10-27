@@ -5,19 +5,14 @@ import pandas as pd
 from scipy import stats
 from scipy.signal import find_peaks
 
-# # Plot vandenBerg data with error in age, using separate colours for different methods
-# # Read data from csv file
+# Plot vandenBerg data with error in age
+# Read data from csv file
 # vandenBergData = pd.read_csv("data/vandenBerg_table2.csv")
 
 # # Plot Metallicity vs Age with errorbars
-# plt.errorbar(
-#     vandenBergData["FeH"],
-#     vandenBergData["Age"],
-#     yerr = vandenBergData["Age_err"],
-#     fmt = '*', 
-#     ecolor = 'gray',
-#     markersize = 6,
-#     capsize = 2,
+# plt.errorbar(vandenBergData["FeH"], vandenBergData["Age"], 
+#              yerr = vandenBergData["Age_err"], fmt = '*', 
+#               ecolor = 'gray', markersize = 6, capsize = 2
 # )
 
 # # Add labels and title
@@ -66,20 +61,9 @@ from scipy.signal import find_peaks
 # accreted = vandenBergData[(vandenBergData["Classification_AMR"] == 'Accreted')]
 # unresolved = vandenBergData[(vandenBergData["Classification_AMR"] == 'Unresolved')]
 
-# plt.scatter(
-#     inSitu["FeH"], inSitu["Age_residual"],
-#     label='In situ'
-# )
-
-# plt.scatter(
-#     accreted["FeH"], accreted["Age_residual"],
-#     label='Accreted'
-# )
-
-# plt.scatter(
-#     unresolved["FeH"], unresolved["Age_residual"],
-#     label='Unresolved'
-# )
+# plt.scatter(inSitu["FeH"], inSitu["Age_residual"], label='In situ')
+# plt.scatter(accreted["FeH"], accreted["Age_residual"], label='Accreted')
+# plt.scatter(unresolved["FeH"], unresolved["Age_residual"], label='Unresolved')
 
 # plt.xlabel("[Fe/H] (dex)")
 # plt.ylabel(r"Normalised Age Residual ($\sigma$)")
@@ -112,14 +96,14 @@ plt.errorbar(
 # Add labels and title
 plt.xlabel("[Fe/H] (dex)")
 plt.ylabel("Age (Gyr)")
-plt.title("GC Classifications on Age vs Metallicity Relation")
+plt.title("GC Classifications using Residuals \n on Age vs Metallicity Relation")
 # plt.savefig("Age_vs_Metallicity.png")
 
 # Fit a linear curve then plot
 result = stats.linregress(vandenBergData["FeH"], vandenBergData["Age"])
 plt.plot(
     vandenBergData["FeH"], result.slope * vandenBergData["FeH"] + result.intercept,
-    label='Linear fit'
+    label='Linear fit', color = 'C2'
 )
 
 # Colour based on classification
@@ -147,7 +131,7 @@ plt.scatter(
 
 outliers = pd.concat([accreted, inSitu])
 for name, x, y in zip(outliers["#NGC"], outliers["FeH"], outliers["Age"]):
-    if (name != 'Pal12'):
+    if (name != 'Pal 12'):
         name = 'NGC ' + str(name)
     annot = plt.annotate(name, xy = (x,y), xytext = (5,5), textcoords = "offset points", arrowprops=dict(arrowstyle="->", color="black", lw=0.5))
     annot.draggable(True)

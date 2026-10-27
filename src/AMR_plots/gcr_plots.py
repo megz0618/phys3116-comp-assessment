@@ -25,7 +25,7 @@ plt.errorbar(
 result = stats.linregress(vandenBergData["FeH"], vandenBergData["Age"])
 plt.plot(
     vandenBergData["FeH"], result.slope * vandenBergData["FeH"] + result.intercept,
-    label='Linear fit', color = 'orange'
+    label='Linear fit', color = 'C2'
 )
 
 # # Add colourbar for R_G values 
@@ -35,12 +35,15 @@ plt.plot(
 # )
 # plt.colorbar(rg, label="Galactocentric Radius (kpc)")
 
-data = pd.read_csv("data/mergedData.csv")
-vb = data[data["Age"].notna()].copy() # Isolate just VandenBerg data
+vandenBergData = pd.read_csv("data/mergedData.csv")
+# Isolate accreted candidates based on R_G > 10 and AMR residual criteria
+# Isolate in-situ candidates based on R_G <= 10 and AMR residual criteria
+accreted = vandenBergData[
+    (vandenBergData["Age_residual"] < -2) & (vandenBergData["R_G"].abs() > 10)]
+inSitu = vandenBergData[
+    (vandenBergData["Age_residual"] > 2) & (vandenBergData["R_G"].abs() <= 10)]
 
-# Isolate and label upper and lower outliers from Metallicity-Age relation
-accreted = vb[(vb["Age_residual"] < -2) & (vb["R_G"].abs() > 10)]
-inSitu = vb[(vb["Age_residual"] > 2) & (vb["R_G"].abs() <= 10)]
+
 outliers = pd.concat([accreted, inSitu])
 
 for name, x, y in zip(outliers["ID"], outliers["FeH"], outliers["Age"]):
