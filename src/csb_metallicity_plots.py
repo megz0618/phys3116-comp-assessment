@@ -8,7 +8,6 @@ mergeddata = pd.read_csv("data/mergedData.csv")
 # Clean column names
 mergeddata.columns = mergeddata.columns.str.strip()
 
-# Use the correct classification column name
 classification_column = "Classification"
 
 # Clean classification labels
@@ -58,7 +57,7 @@ mergeddata[classification_column] = (
 )
 
 # Table with Name and Classification
-table = mergeddata[["Harris_Name", classification_column]]
+table = mergeddata[["ID", classification_column]]
 
 # Print first 20 rows as a preview
 print(table.head(20))

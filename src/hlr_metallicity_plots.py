@@ -1,6 +1,3 @@
-#Matched Milky way globular cluster behavior since half light radius correlated more strongly Galactrocentric distance
-#Metallicity correlated with cluster population type (halo vs bulge)
-#Metallicity does not control structural parameters like r_h
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,7 +9,6 @@ mergeddata = pd.read_csv("data/mergedData.csv")
 # Clean column names
 mergeddata.columns = mergeddata.columns.str.strip()
 
-# Use the correct classification column name
 classification_column = "Classification"
 
 # Clean classification labels
@@ -24,14 +20,13 @@ mergeddata[classification_column] = (
     .str.lower()
 )
 
-# Map classification labels to colours
+# Plotting
 colours = {
     "in-situ": "blue",
     "accreted": "red",
     "unknown/outlier": "grey"
 }
 
-# Plot each classification
 for classification, colour in colours.items():
     subset = mergeddata[
         mergeddata[classification_column] == classification
@@ -52,7 +47,7 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-# Ensure classification column is consistent
+# Tables
 classification_column = "Classification"
 mergeddata[classification_column] = (
     mergeddata[classification_column]
@@ -62,11 +57,11 @@ mergeddata[classification_column] = (
     .str.lower()
 )
 
-# Create a simple table of cluster name + category
-table = mergeddata[["Harris_Name", classification_column]]
+# Table with Name and Classification
+table = mergeddata[["ID", classification_column]]
 
 # Print first 20 rows as a preview
 print(table.head(20))
 
-# If you want the whole table printed:
+# Table printed
 print(table.to_string(index=False))
