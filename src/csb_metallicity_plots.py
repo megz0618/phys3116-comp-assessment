@@ -8,7 +8,7 @@ mergeddata = pd.read_csv("data/mergedData.csv")
 # Clean column names
 mergeddata.columns = mergeddata.columns.str.strip()
 
-classification_column = "Classification"
+classification_column = "Classification_AMR"
 
 # Clean classification labels
 mergeddata[classification_column] = (
@@ -21,9 +21,9 @@ mergeddata[classification_column] = (
 
 # Plotting
 colours = {
-    "in-situ": "blue",
-    "accreted": "red",
-    "unknown/outlier": "grey"
+    "In-situ": "blue",
+    "Accreted": "red",
+    "Unresolved": "grey"
 }
 
 for classification, colour in colours.items():
@@ -47,7 +47,7 @@ plt.tight_layout()
 plt.show()
 
 # Tables
-classification_column = "Classification"
+classification_column = "Classification_AMR"
 mergeddata[classification_column] = (
     mergeddata[classification_column]
     .fillna("Unknown/Outlier")
