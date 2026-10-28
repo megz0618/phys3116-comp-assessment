@@ -16,6 +16,7 @@ plt.errorbar(
     yerr = vandenBergData["Age_err"],
     fmt = '*', 
     ecolor = 'gray',
+    color = 'lightgray',
     markersize = 6,
     capsize = 2,
 )
@@ -24,7 +25,7 @@ plt.errorbar(
 result = stats.linregress(vandenBergData["FeH"], vandenBergData["Age"])
 plt.plot(
     vandenBergData["FeH"], result.slope * vandenBergData["FeH"] + result.intercept,
-    label='Linear fit', color = 'orange'
+    label='Linear fit', color = 'C2'
 )
 
 # Add colourbar for |Z|
@@ -34,12 +35,15 @@ plt.plot(
 #                 cmap = "viridis", marker = "*", s=80, zorder = 3)
 # plt.colorbar(z, label="|Z| (kpc)")
 
-data = pd.read_csv("data/mergedData.csv")
-vb = data[data["Age"].notna()].copy() # Isolate just VandenBerg data
+vandenBergData = pd.read_csv("data/mergedData.csv")
 
-# Isolate and label upper and lower outliers from Metallicity-Age relation
-accreted = vb[(vb["Age_residual"] < -2) & (vb["Z"].abs() > 3)]
-inSitu = vb[(vb["Age_residual"] > 2) & (vb["Z"].abs() <= 3)]
+# Isolate accreted candidates based on |Z| > 3 and AMR residual criteria
+# Isolate in-situ candidates based on |Z| <= 3 and AMR residual criteria
+accreted = vandenBergData[
+    (vandenBergData["Age_residual"] < -2) & (vandenBergData["Z"].abs() > 3)]
+inSitu = vandenBergData[
+    (vandenBergData["Age_residual"] > 2) & (vandenBergData["Z"].abs() <= 3)]
+
 outliers = pd.concat([accreted, inSitu])
 
 for name, x, y in zip(outliers["ID"], outliers["FeH"], outliers["Age"]):
@@ -49,11 +53,11 @@ for name, x, y in zip(outliers["ID"], outliers["FeH"], outliers["Age"]):
 # Add labels and title
 plt.xlabel("[Fe/H] (dex)")
 plt.ylabel("Age (Gyr)")
-plt.title("GC Classifications using Age vs Metallicity Relation \n and Vertical Distance Data")
+plt.title("GC Classifications using Vertical Distance Data \n on Age vs Metallicity Relation")
 
 # Add legend
-plt.scatter(accreted["FeH"], accreted["Age"], color="orange", marker="*", s=60, zorder=4, label="Possibly accreted")
-plt.scatter(inSitu["FeH"], inSitu["Age"], color="green", marker="*", s=60, zorder=4, label="Possibly in-situ")
+plt.scatter(accreted["FeH"], accreted["Age"], color="C1", marker="*", s=60, zorder=4, label="Possibly accreted")
+plt.scatter(inSitu["FeH"], inSitu["Age"], color="C0", marker="*", s=60, zorder=4, label="Possibly in-situ")
 plt.legend(loc="lower left")
 
 # Show and save
