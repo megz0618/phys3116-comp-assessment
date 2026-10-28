@@ -27,19 +27,22 @@ def model(galactic_longitude, a, b, c):
     return a*np.sin(l_rad) + b*np.cos(l_rad) + c
 
 #Perform curve fitting using scipy.optimize.curve_fit
-#best_parameters, covariance = curve_fit(model function, x_data, y_data). From https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html
+#best_parameters, covariance = curve_fit(model function, x_data, y_data). 
+#From https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html
 #best_parameters: Array of best-fit values for the model equation: [a, b, c]
-#covariance: Covariance matrix of popt - Used to find standard deviation of a, b and c. 
+#covariance: Covariance matrix of best_parameters - Used to find standard deviation of a, b and c. 
 best_parameters, covariance = curve_fit(model, galactic_longitude, velocity_lsr) #curve_fit(model function, x_data, y_data)
 
 #Residuals and outlier array:
-residual = velocity_lsr - model(galactic_longitude, best_parameters[0], best_parameters[1], best_parameters[2]) #Difference between data and model for each point
+residual = velocity_lsr - model(galactic_longitude, best_parameters[0], best_parameters[1], best_parameters[2])
+#Residual: Difference between data and model for each point
 std_residual  = np.std(residual) 
 outlier  = np.abs(residual) > 2 * std_residual #Let outliers be any point more than 2 standard deviations from model. 
 #Outlier is an array of true and falses for each GC - True = Outlier, False = Non-outlier 
 
 plt.scatter(galactic_longitude[~outlier], velocity_lsr[~outlier], marker ='*', s = 50, label = 'Within 2std', color = 'blue')
-#The points with a true index from outlier will be plotted. ~ flips array, so all trues become falses and vice versa. So plot all the falses (non-outliers) first .
+#The points with a true index from outlier will be plotted. ~ flips array, so all trues become falses and vice versa. 
+#So plot all the falses (non-outliers) first .
 plt.scatter(galactic_longitude[outlier], velocity_lsr[outlier], marker ='*', s = 90, color = 'red', label='Outliers (>2std)')
 #Plot GCs with true index, which are the outliers.
 
@@ -48,7 +51,8 @@ l_values = np.linspace(0, 360, 361) #Array of degrees from 0 - 360, x values.
 curve = model(l_values, best_parameters[0], best_parameters[1], best_parameters[2]) # a = best_parameters[0], etc. Feed into model function. 
 plt.plot(l_values, curve, 'k-', label = 'Curve of Best Fit') #Add the sine curve of best fit to scatter plot as a black line
 plt.fill_between(l_values, curve - 2*std_residual, curve + 2*std_residual, alpha = 0.3) 
-#Colour the region within 2 std of the curve: plt.fill_between(x values, y lower bound, y upper bound). Alpha sets the transperency so the points are all visible. 
+#Colour the region within 2 std of the curve: plt.fill_between(x values, y lower bound, y upper bound). 
+#Alpha sets the transperency so the points are all visible. 
 
 #Label outliers with their ID on graph:
 for i in np.where(outlier)[0]: #Find where outlier array is true
@@ -137,7 +141,8 @@ plt.xlabel('X (kpc)')
 plt.ylabel('Y (kpc)')
 plt.title('Y vs X With Velocity Outliers') 
 plt.legend()
-#Not limiting axis for this plot as one of the outliers (NGC7006) is outisde the range -25 - 25, but limiting it makes the positions of the other outliers more obvious. 
+#Not limiting axis for this plot as one of the outliers (NGC7006) is outisde the range -25 - 25
+#But limiting it makes the positions of the other outliers more obvious, so do a 4th graph limiting the axis. 
 
 fig = plt.gcf()
 plt.show()
