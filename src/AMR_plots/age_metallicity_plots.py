@@ -50,16 +50,16 @@ from scipy.signal import find_peaks
 # for i in range(len(vandenBergData)):
 #     sigma = vandenBergData.loc[i, "Age_residual"]
 #     if((sigma > 2)):
-#         vandenBergData.loc[i, "Classification_AMR"] = "In-situ"
+#         vandenBergData.loc[i, "Classification"] = "In-situ"
 #     elif(sigma < -2):
-#         vandenBergData.loc[i, "Classification_AMR"] = "Accreted"
+#         vandenBergData.loc[i, "Classification"] = "Accreted"
 #     else:
-#         vandenBergData.loc[i, "Classification_AMR"] = "Unresolved"
+#         vandenBergData.loc[i, "Classification"] = "Unresolved"
 
 # # Plot residuals in colour bands
-# inSitu = vandenBergData[(vandenBergData["Classification_AMR"] == 'In-situ')]
-# accreted = vandenBergData[(vandenBergData["Classification_AMR"] == 'Accreted')]
-# unresolved = vandenBergData[(vandenBergData["Classification_AMR"] == 'Unresolved')]
+# inSitu = vandenBergData[(vandenBergData["Classification"] == 'In-situ')]
+# accreted = vandenBergData[(vandenBergData["Classification"] == 'Accreted')]
+# unresolved = vandenBergData[(vandenBergData["Classification"] == 'Unresolved')]
 
 # plt.scatter(inSitu["FeH"], inSitu["Age_residual"], label='In situ')
 # plt.scatter(accreted["FeH"], accreted["Age_residual"], label='Accreted')
@@ -107,9 +107,9 @@ plt.plot(
 )
 
 # Colour based on classification
-inSitu = vandenBergData[(vandenBergData["Classification_AMR"] == 'In-situ')]
-accreted = vandenBergData[(vandenBergData["Classification_AMR"] == 'Accreted')]
-unresolved = vandenBergData[(vandenBergData["Classification_AMR"] == 'Unresolved')]
+inSitu = vandenBergData[(vandenBergData["Classification"] == 'In-situ')]
+accreted = vandenBergData[(vandenBergData["Classification"] == 'Accreted')]
+unresolved = vandenBergData[(vandenBergData["Classification"] == 'Unresolved')]
 
 plt.scatter(
     inSitu["FeH"], inSitu["Age"],
